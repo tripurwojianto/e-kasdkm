@@ -1,10 +1,10 @@
 {
-  "short_name": "Masjid At-Taqwa",
-  "name": "Masjid At-Taqwa - e-Kas & Logistik",
+  "short_name": "Masjid Wihdatul Ummah",
+  "name": "Masjid Wihdatul Ummah - e-Kas & Logistik",
   "description": "Sistem Informasi Manajemen e-Kas, Catatan Rapat, dan Inventaris Logistik Mandiri Masjid At-Taqwa.",
   "icons": [
     {
-      "src": "https://ik.imagekit.io/kulinaweb/logo-attaqwa.png?updatedAt=1781786644208",
+      "src": "https://ik.imagekit.io/kulinaweb/masjid_wihdatul_ummah.png?updatedAt=1782529355112",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
