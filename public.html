@@ -62,13 +62,21 @@
     </div>
 
     <!-- TABEL MUTASI KAS KELUAR -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
-      <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-arrow-up-from-bracket text-rose-500"></i> Laporan Penggunaan Dana & Bantuan
-        </h3>
-      </div>
-      
+   <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+  <h3 class="font-bold text-slate-900 flex items-center gap-2">
+    <i class="fa-solid fa-arrow-up-from-bracket text-rose-500"></i> Laporan Penggunaan Dana & Bantuan
+  </h3>
+  
+  <!-- TOMBOL EKSPOR -->
+  <div class="flex items-center gap-2 w-full sm:w-auto">
+    <button onclick="eksporCSV()" class="bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+      <i class="fa-solid fa-file-csv text-emerald-600 text-sm"></i> CSV
+    </button>
+    <button onclick="cetakPDF()" class="bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+      <i class="fa-solid fa-file-pdf text-rose-600 text-sm"></i> Cetak/PDF
+    </button>
+  </div>
+</div>
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
@@ -109,15 +117,15 @@
       
       <!-- Baris 3: Kalimat Jembatan / Bridge -->
       <p class="text-xs md:text-sm text-slate-600 font-medium pt-1">
-        Ingin masjid Anda memiliki papan transparansi digital mandiri seperti ini? 
-        <a href="https://www.kasmasjid.web.id" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:text-emerald-700 underline underline-offset-4 font-bold transition inline-flex items-center gap-1">
+        Ingin masjid Anda memiliki aplikasi transparansi digital mandiri seperti ini? 
+        <a href="https://www.landing.kasmasjid.web.id" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:text-emerald-700 underline underline-offset-4 font-bold transition inline-flex items-center gap-1">
           Dapatkan Informasinya di KasMasjid <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
       </p>
       
       <!-- Baris 4: Hak Cipta Ringan -->
       <p class="text-[10px] text-slate-400 font-normal pt-2">
-        &copy; 2026 e-kasmasjid | Bagian dari KulinaSystem
+        &copy; 2026 e-KasMasjid | Bagian dari KulinaSystem
       </p>
       
     </div>
@@ -136,45 +144,46 @@
           tampilkanPesanError();
         }
       } catch (error) {
-        const contohData = [
-          { Tanggal: '2026-06-20', Kategori: 'Sosial & Santunan', Penerima: 'Bapak Ahmad & Keluarga', Keterangan: 'Bantuan pengobatan warga sakit', Nominal: 750000 },
-          { Tanggal: '2026-06-24', Kategori: 'Operasional', Penerima: 'Toko Bangunan Berkah', Keterangan: 'Pembelian semen renovasi tempat wudhu', Nominal: 1200000 },
-          { Tanggal: '2026-06-25', Kategori: 'Sosial & Santunan', Penerima: 'Ibu Aminah (Yatim)', Keterangan: 'Santunan bulanan anak yatim wilayah RW 04', Nominal: 500000 }
-        ];
+        const contohData = [];
         renderTabelPublik(contohData);
       }
     }
 
     function renderTabelPublik(data) {
-      const tbody = // Mengubah widget teks atas berdasarkan kalkulasi data asli yang ditarik
-document.getElementById('txtLogistikMasuk').innerText = data.length + " Mutasi Terdata";
-      tbody.innerHTML = '';
+  // 1. Inisialisasi DOM Tabel dengan benar
+  const tbody = document.getElementById('tableBodyPublik');
+  tbody.innerHTML = '';
 
-      data.forEach(item => {
-        const nominal = Number(item.Nominal || 0);
-        const kat = (item.Kategori || '').toLowerCase();
-        let namaTampilan = item.Penerima || item.penerima || 'Hamba Allah';
-        
-        if (kat.includes('sosial') || kat.includes('santunan') || kat.includes('bantuan')) {
-          namaTampilan = '<span class="italic text-slate-500 font-medium"><i class="fa-solid fa-heart text-rose-400 mr-1.5"></i>Hamba Allah</span>';
-        }
+  // 2. Hitung nominal pengeluaran secara dinamis dari data asli
+  let totalPengeluaran = 0;
 
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50/80 transition-colors";
-        tr.innerHTML = `
-          <td class="p-4 whitespace-nowrap text-slate-500 font-medium">${item.Tanggal}</td>
-          <td class="p-4"><span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-600">${item.Kategori}</span></td>
-          <td class="p-4 font-semibold text-slate-700">${namaTampilan}</td>
-          <td class="p-4 text-slate-600">${item.Keterangan}</td>
-          <td class="p-4 text-right font-bold text-slate-900">Rp ${nominal.toLocaleString('id-ID')}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-      
-      document.getElementById('txtSaldoKas').innerText = "Rp 24.550.000"; 
-      document.getElementById('txtLogistikMasuk').innerText = data.length + " Mutasi Terdata";
+  data.forEach(item => {
+    const nominal = Number(item.Nominal || 0);
+    totalPengeluaran += nominal; // Akumulasi total dana keluar
+    
+    const kat = (item.Kategori || '').toLowerCase();
+    let namaTampilan = item.Penerima || item.penerima || 'Hamba Allah';
+    
+    if (kat.includes('sosial') || kat.includes('santunan') || kat.includes('bantuan')) {
+      namaTampilan = '<span class="italic text-slate-500 font-medium"><i class="fa-solid fa-heart text-rose-400 mr-1.5"></i>Hamba Allah</span>';
     }
 
+    const tr = document.createElement('tr');
+    tr.className = "hover:bg-slate-50/80 transition-colors";
+    tr.innerHTML = `
+      <td class="p-4 whitespace-nowrap text-slate-500 font-medium">${item.Tanggal}</td>
+      <td class="p-4"><span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-600">${item.Kategori}</span></td>
+      <td class="p-4 font-semibold text-slate-700">${namaTampilan}</td>
+      <td class="p-4 text-slate-600">${item.Keterangan}</td>
+      <td class="p-4 text-right font-bold text-slate-900">Rp ${nominal.toLocaleString('id-ID')}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  
+  // 3. Update komponen widget atas secara dinamis berdasarkan data asli
+  document.getElementById('txtLogistikMasuk').innerText = data.length + " Mutasi Terdata";
+  document.getElementById('txtSaldoKas').innerText = "Rp " + totalPengeluaran.toLocaleString('id-ID');
+}
     function tampilkanPesanError() {
       document.getElementById('tableBodyPublik').innerHTML = `
         <tr>
@@ -185,6 +194,46 @@ document.getElementById('txtLogistikMasuk').innerText = data.length + " Mutasi T
     }
 
     window.onload = muatDataPublik;
+// FUNGSI 1: CETAK / SIMPAN KE PDF BAAWAN BROWSER
+function cetakPDF() {
+  window.print();
+}
+
+// FUNGSI 2: GENERATE & DOWNLOAD FILE CSV SECARA INSTAN
+function eksporCSV() {
+  // Ambil semua data yang saat ini tampil (bisa diikat dari variabel data global)
+  // Di sini kita contohkan membuat baris header CSV
+  let barisCsv = ["Tanggal", "Kategori", "Penerima Manfaat", "Keterangan", "Nominal"];
+  let isiCsv = [barisCsv.join(",")];
+  
+  // Ambil elemen baris tabel untuk diekstrak teksnya
+  const barisTabel = document.querySelectorAll("#tableBodyPublik tr");
+  
+  barisTabel.forEach(tr => {
+    const kolom = tr.querySelectorAll("td");
+    if (kolom.length >= 5) {
+      let tanggal = kolom[0].innerText;
+      let kategori = kolom[1].innerText;
+      let penerima = kolom[2].innerText.replace(/,/g, " "); // Hapus koma agar format CSV tidak pecah
+      let keterangan = kolom[3].innerText.replace(/,/g, " ");
+      let nominal = kolom[4].innerText.replace(/[^\d]/g, ""); // Hanya ambil angka saja
+      
+      isiCsv.push(`${tanggal},${kategori},${penerima},${keterangan},${nominal}`);
+    }
+  });
+  
+  // Create file download trigger
+  const fileCsv = new Blob([isiCsv.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const linkEkspor = document.createElement("a");
+  const url = URL.createObjectURL(fileCsv);
+  
+  linkEkspor.setAttribute("href", url);
+  linkEkspor.setAttribute("download", "Laporan_Kas_Jami_Wihdatul_Ummah.csv");
+  linkEkspor.style.visibility = "hidden";
+  document.body.appendChild(linkEkspor);
+  linkEkspor.click();
+  document.body.removeChild(linkEkspor);
+}
   </script>
 </body>
 </html>
