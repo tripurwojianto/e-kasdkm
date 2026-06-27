@@ -19,7 +19,9 @@
     <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
       <!-- Sisi Kiri: Identitas Masjid -->
       <div>
-        <h1 class="text-xl font-bold tracking-tight text-slate-900">Masjid Jami Wihdatul Ummah</h1>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900">
+  Masjid Jami <span class="block sm:inline">Wihdatul Ummah</span>
+</h1>
         <p class="text-xs font-medium text-emerald-600">Papan Transparansi Publik & Akuntabilitas Umat</p>
       </div>
       
@@ -144,7 +146,8 @@
     }
 
     function renderTabelPublik(data) {
-      const tbody = document.getElementById('tableBodyPublik');
+      const tbody = // Mengubah widget teks atas berdasarkan kalkulasi data asli yang ditarik
+document.getElementById('txtLogistikMasuk').innerText = data.length + " Mutasi Terdata";
       tbody.innerHTML = '';
 
       data.forEach(item => {
