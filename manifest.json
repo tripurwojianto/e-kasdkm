@@ -1,0 +1,24 @@
+{
+  "short_name": "Masjid At-Taqwa",
+  "name": "Masjid At-Taqwa - e-Kas & Logistik",
+  "description": "Sistem Informasi Manajemen e-Kas, Catatan Rapat, dan Inventaris Logistik Mandiri Masjid At-Taqwa.",
+  "icons": [
+    {
+      "src": "https://ik.imagekit.io/kulinaweb/logo-attaqwa.png?updatedAt=1781786644208",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/4341/4341134.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#f8fafc",
+  "theme_color": "#047857",
+  "display": "standalone",
+  "orientation": "portrait"
+}
